@@ -37,16 +37,12 @@ module.exports = {
                     .then(collected => {
                         let r = collected.first();
                         if (r.emoji.name == '✅') 
+                        {
                             DeletarMesa(Context, Msg);
-                    })
-                }
+                        }
+                    });
+                
             }
-
-
-
-
-
-
 
 
 
