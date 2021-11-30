@@ -32,7 +32,7 @@ module.exports = {
 
                 var Msg = await Context.reply("Você esta preste a deletar a mesa tem certeza... **Use a reação para confirmar**");
 
-                await Msg.react('✅');
+                await Msg.react("✅");
                 console.warn("run1");
                 var react = await Msg.awaitReactions(
                     (reaction, user) => reaction.emoji.name === '✅' && user.id === Context.author.id,
