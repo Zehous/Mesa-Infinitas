@@ -5,7 +5,7 @@ module.exports = {
         {
             if (Args.length == 0)
             {
-                Context.reply("use: .mesa {criar/deletar/renomear}");
+                Context.reply("use: .mesa {criar/deletar/renomear/chat}");
                 return;
             }
 
@@ -34,17 +34,45 @@ module.exports = {
                 DeletarMesa(Context, Args[1], Msg);
             }
 
-            if (Args[0].toLowerCase() === "renomear")
+            if (Args[0].toLowerCase() === "chat")
             {
                 if (Args.length == 1)
                 {
-                    Context.reply("use: .mesa renomear {nome}");
+                    Context.reply("use: .mesa chat {criar/deletar/renomear}");
                     return;
                 }
 
-                var Msg = await Context.reply("Mesa Sendo Renomeada...");
-                var Name = Args.slice(1, Args.length).toString();
-                RenameChatMesa(Context, Name, Msg);
+                if (Args[1].toLowerCase() === "criar")
+                {
+                    if (Args.length == 2)
+                    {
+                        Context.reply("use: .mesa criar {nome}");
+                        return;
+                    }
+
+                    var Msg = await Context.reply("Chat da Mesa Sendo Criada...");
+                    var Name = Args.slice(2, Args.length).toString();
+                    CriaChatMesa(Context, Name, Msg);
+                }
+
+                if (Args[1].toLowerCase() === "deletar" || Args[0].toLowerCase() === "del")
+                {
+                    var Msg = await Context.reply("Chat da Mesa Sendo Deletada...");
+                    DelChatMesa(Context, Msg);
+                }
+
+                if (Args[1].toLowerCase() === "renomear" || Args[1].toLowerCase() === "rename")
+                {
+                    if (Args.length == 2)
+                    {
+                        Context.reply("use: .mesa chat renomear {nome}");
+                        return;
+                    }
+
+                    var Msg = await Context.reply("Chat da Mesa Sendo Renomeada...");
+                    var Name = Args.slice(1, Args.length).toString();
+                    RenameChatMesa(Context, Name, Msg);
+                }
             }
         }
         else if (Command.toLowerCase() === ".clear")
@@ -126,6 +154,51 @@ async function RenameChatMesa(Context, Name, Msg)
         }).catch(() => {
             Msg.delete();
         })
+    }
+    catch { Msg.delete() }
+}
+
+async function CriaChatMesa(Context, Name, Msg)
+{
+    try{
+        var Utility = require("./Utility.js");
+
+        Name = Name.toString().toLowerCase().replace(",", "_").replace(" ", "_");
+
+        var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.id === Context.channel.parentId && x.deleted === false );
+        var Category = Cat.values().next().value;
+
+        if (Category.name[0] != '.')
+            return Msg.delete();
+
+        await Utility.createChannel(Context, Name, 'GUILD_TEXT', Category);
+
+        await Context.delete();
+        await Msg.edit(`Chat Criado...! By:<@${Context.author.id}>`);
+    }
+    catch { Msg.delete() }
+}
+
+async function DelChatMesa(Context, Msg)
+{
+    try{
+        var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.id === Context.channel.parentId && x.deleted === false );
+        var Category = Cat.values().next().value;
+
+        if (Category.name[0] != '.')
+            return Msg.delete();
+
+
+        if (Category.children.length >= 2)
+        {
+            await Context.channel.delete();
+
+            await Context.delete();
+            await Msg.edit(`Chat Deletado...! By:<@${Context.author.id}>`);
+        }
+        else {
+            await Msg.edit(`Para Deletar um Chat Precisa de pelo menos um outro chat! By:<@${Context.author.id}>`);
+        }
     }
     catch { Msg.delete() }
 }
