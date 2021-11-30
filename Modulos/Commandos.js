@@ -5,7 +5,7 @@ module.exports = {
         {
             if (Args.length == 0)
             {
-                Context.reply("use: .mesa {criar/deletar/renomear/chat}");
+                Context.reply("use: .mesa {criar/deletar/chat}");
                 return;
             }
 
@@ -189,7 +189,7 @@ async function DelChatMesa(Context, Msg)
             return Msg.delete();
 
 
-        if (Category.children.length >= 2)
+        if (Category.children.size >= 2)
         {
             await Context.channel.delete();
 
