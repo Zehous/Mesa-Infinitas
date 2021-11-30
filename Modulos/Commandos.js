@@ -48,11 +48,11 @@ module.exports = {
 
                 let msg = await channel.send('foo');
                 console.log('First');
-                let msgReaction = await msg.react(emojiPrevious);
+                let msgReaction = await msg.react('📮');
                 console.log('Second', msgReaction.message.reactions.keys());
-                msgReaction = await msg.react(emojiNext);
+                msgReaction = await msg.react('📋');
                 console.log('Third', msgReaction.message.reactions.keys());
-                msgReaction = await msg.react(emojiClap);
+                msgReaction = await msg.react('📰');
                 console.log('Fourth',  msgReaction.message.reactions.keys());
                 try {
                     let collected = await msgReaction.message.awaitReactions(filter, {max: 2, time: 1000, errors: ['time']})
