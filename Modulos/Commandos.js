@@ -192,9 +192,6 @@ async function DelChatMesa(Context, Msg)
         if (Category.children.size >= 2)
         {
             await Context.channel.delete();
-
-            await Context.delete();
-            await Msg.edit(`Chat Deletado...! By:<@${Context.author.id}>`);
         }
         else {
             await Msg.edit(`Para Deletar um Chat Precisa de pelo menos um outro chat! By:<@${Context.author.id}>`);
