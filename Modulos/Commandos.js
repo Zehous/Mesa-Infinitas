@@ -26,13 +26,30 @@ module.exports = {
             {
                 if (Args.length == 1)
                 {
-                    Context.reply("use: .mesa deletar {id}");
+                    Context.reply("use: .mesa deletar");
                     return;
                 }
                 
-                var Msg = await Context.reply("Mesa Sendo Deletada...");
-                DeletarMesa(Context, Args[1], Msg);
+                var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.id === Context.channel.parentId && x.deleted === false );
+                var Category = Cat.values().next().value;
+
+                if (Category.name[0] != '.')
+                    return Context.reply("Essa categoria não e uma mesa valida...");
+
+                var Msg = await Context.reply("Você esta preste a deletar a mesa tem certeza... **Use a reação para confirmar**");
+                Msg.react('✅').then((reaction) => {
+                    DeletarMesa(Context, Msg)
+                });
+                //DeletarMesa(Context, Msg);
             }
+
+
+
+
+
+
+
+
 
             if (Args[0].toLowerCase() === "chat")
             {
@@ -101,17 +118,16 @@ async function CriarMesa(Context, Name, Msg)
     await Msg.edit(`Mesa Criada...! By:<@${Context.author.id}>`);
 }
 
-async function DeletarMesa(Context, Id, Msg)
+async function DeletarMesa(Context, Msg)
 {
-    if (isNaN(Args[1])) return await Msg.edit("use: .mesa deletar {id} // Coloque o Id da Mesa Valido.");
-
-    var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.deleted === false );
-    Cat = Cat.filter(x => x.id === Id);
-
     try{
+
+        await Msg.edit(`Mesa sendo Deletada...! By:<@${Context.author.id}>`);
+        var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.id === Context.channel.parentId && x.deleted === false );
         var Category = Cat.values().next().value;
+
         if (Category.name[0] != '.')
-            return Msg.delete();
+            return Msg.edit("Categoria não pode ser deletada...");
 
         var IdRole = 1;
         for (let perm of Category.permissionOverwrites.cache) {
@@ -132,7 +148,7 @@ async function DeletarMesa(Context, Id, Msg)
         await Role.delete();
         await Category.delete();
         await Context.delete();
-        await Msg.edit(`Mesa Deletada...! By:<@${Context.author.id}>`);
+        
     }
     catch { Msg.delete() }
 }
