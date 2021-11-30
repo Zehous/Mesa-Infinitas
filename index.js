@@ -1,5 +1,5 @@
 const { Client, Intents, ActivityFlags } = require('discord.js');
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS] });
 
 console.clear();
 
@@ -19,4 +19,5 @@ client.on("message", async msg => {
     require('./Modulos/Commandos').Run(msg, cmd, args);
 });
 
-client.login(process.env.TokenDiscord);
+//client.login(process.env.TokenDiscord);
+client.login("NzU5MDc5NjgzODgxOTU5NDg1.X24SCw.vUvTInZJXBPnBy8Q_pSztMjXt0g");

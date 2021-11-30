@@ -32,16 +32,24 @@ module.exports = {
 
 
                 var Msg = await Context.reply("Você esta preste a deletar a mesa tem certeza... **Use a reação para confirmar**");
-                await Msg.react('✅');
 
-                console.log("teste")
-                Msg.createReactionCollection(r => ['✅'].includes(r.emoji.name))
-                    .on('collect', r => { 
-                    if (r.emoji.name == '✅') 
-                        DeletarMesa(Context, Msg);
+                Msg.react('✅');
+
+                Msg.awaitReactions({ max: 2, time: 15000 })
+                    .then(collected => {
+                        var React = collected.first();
+
+                        var Users = React.users._cache.filter(x => x.id === Context.author.id);
+                        var User = Users.values().next().value;
+
+                        if (User.id == Context.author.id && React._emoji.name === '✅')
+                            DeletarMesa(Context, Msg);
+                    })
+                    .catch(collected => {
+                        Context.delete();
+                        Msg.delete();
                     });
-                
-                
+
             }
 
 
@@ -69,8 +77,32 @@ module.exports = {
 
                 if (Args[1].toLowerCase() === "deletar" || Args[1].toLowerCase() === "del")
                 {
-                    var Msg = await Context.reply("Chat da Mesa Sendo Deletada...");
-                    DelChatMesa(Context, Msg);
+                    var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.id === Context.channel.parentId && x.deleted === false );
+                    var Category = Cat.values().next().value;
+
+                    if (Category.name[0] != '.')
+                        return Context.reply("Essa categoria não e uma mesa valida...");
+
+
+                    var Msg = await Context.reply("Você esta preste a deletar o chat tem certeza... **Use a reação para confirmar**");
+
+                    Msg.react('✅');
+
+                    Msg.awaitReactions({ max: 2, time: 15000 })
+                        .then(collected => {
+                            var React = collected.first();
+
+                            var Users = React.users._cache.filter(x => x.id === Context.author.id);
+                            var User = Users.values().next().value;
+
+                            if (User.id == Context.author.id && React._emoji.name === '✅')
+                                DelChatMesa(Context, Msg);
+                        })
+                        .catch(collected => {
+                            Context.delete();
+                            Msg.delete();
+                        });
+
                 }
 
                 if (Args[1].toLowerCase() === "renomear" || Args[1].toLowerCase() === "rename")
@@ -117,7 +149,7 @@ async function DeletarMesa(Context, Msg)
 {
     try{
 
-        await Msg.edit(`Mesa sendo Deletada...! By:<@${Context.author.id}>`);
+        await Msg.reactions.removeAll();
         var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.id === Context.channel.parentId && x.deleted === false );
         var Category = Cat.values().next().value;
 
@@ -142,7 +174,6 @@ async function DeletarMesa(Context, Msg)
 
         await Role.delete();
         await Category.delete();
-        await Context.delete();
         
     }
     catch { Msg.delete() }
