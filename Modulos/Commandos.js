@@ -144,7 +144,7 @@ async function RenameChatMesa(Context, Name, Msg)
         var Category = Cat.values().next().value;
 
         if (Category.name[0] != '.')
-            return Msg.delete();
+            return Msg.edit("o chat não pode ser remomeado nessa categoria...");
 
         Name = Name.toLowerCase().toString();
         
@@ -169,7 +169,7 @@ async function CriaChatMesa(Context, Name, Msg)
         var Category = Cat.values().next().value;
 
         if (Category.name[0] != '.')
-            return Msg.delete();
+            return Msg.edit("o chat não pode ser criado nessa categoria...");
 
         await Utility.createChannel(Context, Name, 'GUILD_TEXT', Category);
 
@@ -186,7 +186,7 @@ async function DelChatMesa(Context, Msg)
         var Category = Cat.values().next().value;
 
         if (Category.name[0] != '.')
-            return Msg.delete();
+            return Msg.edit("o chat não pode ser deletado nessa categoria...");
 
 
         if (Category.children.size >= 2)
