@@ -71,7 +71,7 @@ module.exports = {
                     }
 
                     var Msg = await Context.reply("Chat da Mesa Sendo Criada...");
-                    var Name = Args.slice(2, Args.length).toString();
+                    var Name = Args.slice(2, Args.length);
                     CriaChatMesa(Context, Name, Msg);
                 }
 
@@ -205,7 +205,9 @@ async function CriaChatMesa(Context, Name, Msg)
     try{
         var Utility = require("./Utility.js");
 
-        Name = Name.toString().toLowerCase().replace(",", "_").replace(" ", "_");
+        Name = Name.toString().toLowerCase();
+        Name = Name.replaceAll(" ", "_");
+        Name = Name.replaceAll(",", "_");
 
         var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.id === Context.channel.parentId && x.deleted === false );
         var Category = Cat.values().next().value;
