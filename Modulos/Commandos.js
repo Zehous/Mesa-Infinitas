@@ -31,7 +31,9 @@ module.exports = {
                     return Context.reply("Essa categoria não e uma mesa valida...");
 
                 var Msg = await Context.reply("Você esta preste a deletar a mesa tem certeza... **Use a reação para confirmar**");
-                Msg.react("️️✔️");
+                
+                await Msg.react('✔️');
+                
                 var react = await Msg.awaitReactions(
                     (reaction, user) => reaction.emoji.name === '✔️' && user.id === message.author.id,
                     { max: 1, time: Infinity, errors: ['time'] }
