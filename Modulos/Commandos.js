@@ -120,7 +120,7 @@ async function RenameChatMesa(Context, Name, Msg)
 
         Name = Name.toLowerCase().toString();
         
-        Context.channel.setName(Name).then(() => {
+        Context.channel.setName(Name).then(async () => {
             await Context.delete();
             await Msg.edit(`Chat Renomada...! By:<@${Context.author.id}>`);
         }).catch(() => {
