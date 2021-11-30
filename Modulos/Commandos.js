@@ -33,19 +33,14 @@ module.exports = {
 
                 var Msg = await Context.reply("Você esta preste a deletar a mesa tem certeza... **Use a reação para confirmar**");
                 await Msg.react('✅');
-                
+
                 console.log("teste")
-                Msg.awaitReactions(r => ['✅'], {max: 1})
-                    .then(collected => {
-                        console.log("teste1")
-                        let r = collected.first();
-                        console.log("teste2")
-                        if (r.emoji === '✅') 
-                        {
-                            console.log("teste3")
-                            DeletarMesa(Context, Msg);
-                        }
+                Msg.createReactionCollection(r => ['✅'].includes(r.emoji.name))
+                    .on('collect', r => { 
+                    if (r.emoji.name == '✅') 
+                        DeletarMesa(Context, Msg);
                     });
+                
                 
             }
 
