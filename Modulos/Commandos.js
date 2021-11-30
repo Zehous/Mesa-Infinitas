@@ -36,7 +36,7 @@ module.exports = {
                 console.warn("run1");
                 var react = await Msg.awaitReactions(
                     (reaction, user) => reaction.emoji.name === '✅' && user.id === Context.author.id,
-                    { max: 1, time: Infinity, errors: ['time'] }
+                    { max: 1, time: 1000, errors: ['time'] }
                 );
                 console.warn("run2");
                 if (react && react.first()) { 
