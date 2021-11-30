@@ -31,23 +31,13 @@ module.exports = {
                     return Context.reply("Essa categoria não e uma mesa valida...");
 
                 var Msg = await Context.reply("Você esta preste a deletar a mesa tem certeza... **Use a reação para confirmar**");
-                Msg.react('✅').then((reaction) => {
+                Msg.react("️️✔️");
+                var react = await Msg.awaitReactions(
+                    (reaction, user) => reaction.emoji.name === '✔️' && user.id === message.author.id,
+                    { max: 1, time: Infinity, errors: ['time'] }
+                );
 
-                     // This is filter, this specified which reactions it should capture, you can use filter to make sure you're only catching specific reactions by specific user
-                    const filter = (reaction, user) => (reaction.emoji.name === '✅');
-
-                    // Here, we're defining a collector that will be active for 30 seconds and collect reactions that pass the above filter
-                    const collector = Msg.message.createReactionCollector(filter, {time: 10000});
-
-                    // This event is emitted when a reaction passes through the filter
-                    collector.on('collect', (r, u) => {
-                        if (r.emoji.name === '✅')
-                            DeletarMesa(Context, Msg);
-                    });
-                    
-                   
-                });
-                //DeletarMesa(Context, Msg);
+                if (react && react.first()) DeletarMesa(Context, Msg);
             }
 
 
