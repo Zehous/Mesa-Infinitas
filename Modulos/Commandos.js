@@ -55,7 +55,7 @@ module.exports = {
                     CriaChatMesa(Context, Name, Msg);
                 }
 
-                if (Args[1].toLowerCase() === "deletar" || Args[0].toLowerCase() === "del")
+                if (Args[1].toLowerCase() === "deletar" || Args[1].toLowerCase() === "del")
                 {
                     var Msg = await Context.reply("Chat da Mesa Sendo Deletada...");
                     DelChatMesa(Context, Msg);
