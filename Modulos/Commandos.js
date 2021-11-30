@@ -114,7 +114,7 @@ module.exports = {
                     }
 
                     var Msg = await Context.reply("Chat da Mesa Sendo Renomeada...");
-                    var Name = Args.slice(1, Args.length).toString();
+                    var Name = Args.slice(2, Args.length).toString();
                     RenameChatMesa(Context, Name, Msg);
                 }
             }
