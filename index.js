@@ -19,5 +19,4 @@ client.on("message", async msg => {
     require('./Modulos/Commandos').Run(msg, cmd, args);
 });
 
-//client.login(process.env.TokenDiscord);
-client.login("NzU5MDc5NjgzODgxOTU5NDg1.X24SCw.KdyJ9zv5l5L_pVwLA5q5enuHGN8");
+client.login(process.env.TokenDiscord);
