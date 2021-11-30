@@ -46,7 +46,7 @@ module.exports = {
                 }
                 */
 
-                let msg = await channel.send('foo');
+                let msg = await Context.channel.send('foo');
                 console.log('First');
                 let msgReaction = await msg.react('📮');
                 console.log('Second', msgReaction.message.reactions.keys());
