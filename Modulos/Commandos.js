@@ -31,15 +31,18 @@ module.exports = {
                     return Context.reply("Essa categoria não e uma mesa valida...");
 
                 var Msg = await Context.reply("Você esta preste a deletar a mesa tem certeza... **Use a reação para confirmar**");
-                
+
                 await Msg.react('✔️');
-                
+                console.warn("run1");
                 var react = await Msg.awaitReactions(
                     (reaction, user) => reaction.emoji.name === '✔️' && user.id === message.author.id,
                     { max: 1, time: Infinity, errors: ['time'] }
                 );
-
-                if (react && react.first()) DeletarMesa(Context, Msg);
+                console.warn("run2");
+                if (react && react.first()) { 
+                    console.warn("run3");
+                    DeletarMesa(Context, Msg);
+                }
             }
 
 
