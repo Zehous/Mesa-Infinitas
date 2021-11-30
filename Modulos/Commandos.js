@@ -49,7 +49,7 @@ module.exports = {
         }
         else if (Command.toLowerCase() === ".clear")
         {
-            ClearChannel(Context, Arg[0]);
+            ClearChannel(Context, Args[0]);
         }
     }
 }
