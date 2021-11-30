@@ -24,12 +24,6 @@ module.exports = {
 
             if (Args[0].toLowerCase() === "deletar")
             {
-                if (Args.length == 1)
-                {
-                    Context.reply("use: .mesa deletar");
-                    return;
-                }
-                
                 var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.id === Context.channel.parentId && x.deleted === false );
                 var Category = Cat.values().next().value;
 
