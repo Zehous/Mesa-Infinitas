@@ -30,32 +30,15 @@ module.exports = {
                 if (Category.name[0] != '.')
                     return Context.reply("Essa categoria não e uma mesa valida...");
 
-                /*
+
                 var Msg = await Context.reply("Você esta preste a deletar a mesa tem certeza... **Use a reação para confirmar**");
-
-                await Msg.react("✅");
-                console.warn("run1");
-                var react = await Msg.awaitReactions(
-                    (reaction, user) => reaction.emoji.name === '✅' && user.id === Context.author.id,
-                    { max: 1, time: 1000, errors: ['time'] }
-                );
-                console.warn("run2");
-                if (react && react.first()) { 
-                    console.warn("run3");
-                    DeletarMesa(Context, Msg);
-                }
-                */
-
-                let msg = await Context.channel.send('foo');
-                console.log('First');
-                let msgReaction = await msg.react('📮');
-                msgReaction = await msg.react('📋');
-                msgReaction = await msg.react('📰');
-                try {
-                    let collected = await msgReaction.message.awaitReactions(filter, {max: 2, time: 1000, errors: ['time']})
-                    console.log('ending', collected);
-                } catch(partialCollection) {
-                    console.log(`After 5 sec, only ${partialCollection.size} out of 2 reacted: ${partialCollection.map((v,k) => k)}`);
+                await Msg.react('✅');
+                Msg.awaitReactions(r => ['✅'].includes(r.emoji.name), {max: 1})
+                    .then(collected => {
+                        let r = collected.first();
+                        if (r.emoji.name == '✅') 
+                            DeletarMesa(Context, Msg);
+                    })
                 }
             }
 
