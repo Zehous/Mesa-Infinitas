@@ -37,7 +37,7 @@ module.exports = {
                     const filter = (reaction, user) => (reaction.emoji.name === '✅');
 
                     // Here, we're defining a collector that will be active for 30 seconds and collect reactions that pass the above filter
-                    const collector = embedMsg.message.createReactionCollector(filter, {time: 10000});
+                    const collector = Msg.message.createReactionCollector(filter, {time: 10000});
 
                     // This event is emitted when a reaction passes through the filter
                     collector.on('collect', (r, u) => {
