@@ -29,8 +29,7 @@ module.exports = {
                     Context.reply("use: .mesa deletar {id}");
                     return;
                 }
-                if (isNaN(Args[1])) return Context.reply("use: .mesa deletar {id} // Coloque o Id da Mesa Valido.");
-
+                
                 var Msg = await Context.reply("Mesa Sendo Deletada...");
                 DeletarMesa(Context, Args[1], Msg);
             }
@@ -50,20 +49,7 @@ module.exports = {
         }
         else if (Command.toLowerCase() === ".clear")
         {
-            if(!Context.guild.me.permissions.has("MANAGE_MESSAGES")) {
-                Context.reply(`${Context.guild.me.Name} não tem permissão \`\`MANAGE_MESSAGES\`\``);
-                return;
-            }
-
-            if (!Args[0]) return Context.reply("Coloque um numero de menssagens para limpar.");
-            if (isNaN(Args[0])) return Context.reply("Coloque um numero verdadeira.");
-
-            if (Args[0] > 100) return Context.reply("Valor tem que ser menor que 100.");
-            if (Args[0] < 1) return Context.reply("Valor tem que ser maior que 1.");
-
-            await Context.channel.messages.fetch({limit: Args[0]}).then(msgs => {
-                Context.channel.bulkDelete(msgs);
-            })
+            ClearChannel(Context, Arg[0]);
         }
     }
 }
@@ -89,8 +75,7 @@ async function CriarMesa(Context, Name, Msg)
 
 async function DeletarMesa(Context, Id, Msg)
 {
-    if (isNaN(Id))
-        return Msg.delete();
+    if (isNaN(Args[1])) return await Msg.edit("use: .mesa deletar {id} // Coloque o Id da Mesa Valido.");
 
     var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.deleted === false );
     Cat = Cat.filter(x => x.id === Id);
@@ -126,10 +111,8 @@ async function DeletarMesa(Context, Id, Msg)
 
 async function RenameChatMesa(Context, Name, Msg)
 {
-    var chat = Context.channel;
-    var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.id === chat.parentId && x.deleted === false );
-
     try{
+        var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.id === Context.channel.parentId && x.deleted === false );
         var Category = Cat.values().next().value;
 
         if (Category.name[0] != '.')
@@ -137,12 +120,31 @@ async function RenameChatMesa(Context, Name, Msg)
 
         Name = Name.toLowerCase().toString();
         
-        await chat.setName(Name);
-        await Context.delete();
-        await Msg.edit(`Chat Renomada...! By:<@${Context.author.id}>`);
+        Context.channel.setName(Name).then(() => {
+            await Context.delete();
+            await Msg.edit(`Chat Renomada...! By:<@${Context.author.id}>`);
+        }).catch(() => {
+            Msg.delete();
+        })
     }
     catch { Msg.delete() }
 }
 
+async function ClearChannel(Context, Index)
+{
+    if(!Context.guild.me.permissions.has("MANAGE_MESSAGES")) {
+        Context.reply(`${Context.guild.me.Name} não tem permissão \`\`MANAGE_MESSAGES\`\``);
+        return;
+    }
 
+    if (!Index) return Context.reply("Coloque um numero de menssagens para limpar.");
+    if (isNaN(Index)) return Context.reply("Coloque um numero verdadeira.");
+
+    if (Index > 100) return Context.reply("Valor tem que ser menor que 100.");
+    if (Index < 1) return Context.reply("Valor tem que ser maior que 1.");
+
+    await Context.channel.messages.fetch({limit: Index}).then(msgs => {
+        Context.channel.bulkDelete(msgs);
+    })
+}
 
