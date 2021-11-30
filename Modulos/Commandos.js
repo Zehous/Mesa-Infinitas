@@ -188,7 +188,9 @@ async function RenameChatMesa(Context, Name, Msg)
         if (Category.name[0] != '.')
             return Msg.edit("o chat não pode ser remomeado nessa categoria...");
 
-        Name = Name.toLowerCase().toString();
+        Name = Name.toString().toLowerCase();
+        Name = Name.replaceAll(" ", "_");
+        Name = Name.replaceAll(",", "_");
         
         Context.channel.setName(Name).then(async () => {
             await Context.delete();
