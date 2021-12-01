@@ -248,6 +248,9 @@ async function UserAdd(Context, MesaId)
 {
     var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.id === MesaId && x.deleted === false );
     var Category = Cat.values().next().value;
+
+    if (Category === undefined) return Context.reply("error: categoria não achada...");
+
     var Role = GetRoleByCategory(Context, Category);
     var Ment = Context.mentions.members.first();
 
@@ -270,6 +273,9 @@ async function UserRem(Context, MesaId)
 {
     var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.id === MesaId && x.deleted === false );
     var Category = Cat.values().next().value;
+
+    if (Category === undefined) return Context.reply("error: categoria não achada...");
+
     var Role = GetRoleByCategory(Context, Category);
     var Ment = Context.mentions.members.first();
 
