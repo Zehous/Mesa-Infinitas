@@ -115,11 +115,22 @@ async function CriarMesa(Context, Name, Msg)
     var Role = await Utility.createRole(Context, Name, 'GREY');
     var SpecRole = Context.guild.roles.cache.find(x => x.name.toLowerCase().includes('spec'));
 
-    var Config = [
-        { id: Context.guild.id, deny: ['VIEW_CHANNEL']}, 
-        { id: Role.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'CONNECT', 'SPEAK']},
-        { id: SpecRole.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'CONNECT']},
-    ]
+    var Config = [{}];
+
+    if (SpecRole != undefined)
+    {
+        Config = [
+            { id: Context.guild.id, deny: ['VIEW_CHANNEL']}, 
+            { id: Role.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'CONNECT', 'SPEAK']},
+            { id: SpecRole.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'CONNECT']},
+        ]
+    }
+    else{
+        Config = [
+            { id: Context.guild.id, deny: ['VIEW_CHANNEL']}, 
+            { id: Role.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'CONNECT', 'SPEAK']},
+        ]
+    }
 
     var Category = await Utility.createCategory(Context, `.${Name}`, Config);
     await Utility.createChannel(Context, 'chat', 'GUILD_TEXT', Category);
