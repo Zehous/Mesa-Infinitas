@@ -116,7 +116,8 @@ async function CriarMesa(Context, Name, Msg)
 
     var Config = [
         { id: Context.guild.id, deny: ['VIEW_CHANNEL']}, 
-        { id: Role.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'CONNECT', 'SPEAK']}
+        { id: Role.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'CONNECT', 'SPEAK']},
+        { id: 915011711491248188, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'CONNECT']},
     ]
 
     var Category = await Utility.createCategory(Context, `.${Name}`, Config);
