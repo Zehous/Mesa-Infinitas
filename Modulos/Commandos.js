@@ -113,7 +113,7 @@ async function CriarMesa(Context, Name, Msg)
     Name += `_(${Context.author.username})`;
 
     var Role = await Utility.createRole(Context, Name, 'GREY');
-    var Category = await Utility.createCategory(Context, `.${Name}`, [{ id: Context.guild.id, deny: ['VIEW_CHANNEL']}, { id: Role.id, allow: ['VIEW_CHANNEL']}]);
+    var Category = await Utility.createCategory(Context, `.${Name}`, [{ id: Context.guild.id, deny: ['VIEW_CHANNEL']}, { id: Role.id, allow: ['READ_MESSAGE_HISTORY']}, { id: Role.id, allow: ['SEND_MESSAGES']}, { id: Role.id, allow: ['CONNECT']}, { id: Role.id, allow: ['SPEAK']}]);
     await Utility.createChannel(Context, 'chat', 'GUILD_TEXT', Category);
     await Utility.createChannel(Context, 'dado', 'GUILD_TEXT', Category);
     await Utility.createChannel(Context, 'links', 'GUILD_TEXT', Category);
