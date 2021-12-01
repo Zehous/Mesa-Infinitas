@@ -5,7 +5,9 @@ module.exports = {
         {
             if (Args.length == 0)
             {
-                Context.reply("use: .mesa {criar/deletar/chats/usuarios}");
+                if (CheckIsValidMesa(Context))
+                    Context.reply("use: .mesa {criar/deletar/chats/usuarios}");
+                else Context.reply("use: .mesa {criar/usuarios}");
                 return;
             }
 
@@ -315,6 +317,17 @@ async function UserRem(Context, MesaId)
 
 
 
+
+function CheckIsValidMesa(Context)
+{
+    var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.id === Context.channel.parentId && x.deleted === false );
+    var Category = Cat.values().next().value;
+
+    if (Category === undefined || Category.name[0] != '.')
+        return false;
+
+    return true;
+}
 
 function GetRoleByCategory(Context, Category)
 {
