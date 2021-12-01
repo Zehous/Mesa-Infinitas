@@ -235,8 +235,8 @@ async function DelChatMesa(Context, Msg)
 
 async function ClearChannel(Context, Index)
 {
-    if(!Context.guild.me.permissions.has("MANAGE_MESSAGES")) {
-        Context.reply(`${Context.guild.me.Name} não tem permissão \`\`MANAGE_MESSAGES\`\``);
+    if(!Context.member.permissions.has("MANAGE_MESSAGES")) {
+        Context.reply(`<@${Context.author.id}> não tem permissão \`\`MANAGE_MESSAGES\`\``);
         return;
     }
 
