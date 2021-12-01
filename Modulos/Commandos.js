@@ -112,6 +112,8 @@ async function CriarMesa(Context, Name, Msg)
     Name = Name.toString().toLowerCase().replace(",", "_").replace(" ", "_");
     Name += `_(${Context.author.username})`;
 
+    var Role = await Utility.createRole(Context, Name, 'GREY');
+
     var Config = [
         { id: Context.guild.id, deny: ['VIEW_CHANNEL']}, 
         { id: Role.id, allow: ['VIEW_CHANNEL']}, 
@@ -121,7 +123,6 @@ async function CriarMesa(Context, Name, Msg)
         { id: Role.id, allow: ['SPEAK']} 
     ]
 
-    var Role = await Utility.createRole(Context, Name, 'GREY');
     var Category = await Utility.createCategory(Context, `.${Name}`, Config);
     await Utility.createChannel(Context, 'chat', 'GUILD_TEXT', Category);
     await Utility.createChannel(Context, 'dado', 'GUILD_TEXT', Category);
