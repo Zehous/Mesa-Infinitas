@@ -330,10 +330,14 @@ async function CheckMark(Context, Function)
             await Msg.reactions.removeAll();
 
             var Users = React.users._cache.filter(x => x.id === Context.author.id);
+
             var User = Users.values().next().value;
 
-            if (User.id == Context.author.id && React._emoji.name === '✅')
-                Function(Context, Msg);
+            if (User != undefined)
+            {
+                if (User.id == Context.author.id && React._emoji.name === '✅')
+                    Function(Context, Msg);
+            }
         })
         .catch(collected => {
             Context.delete();
