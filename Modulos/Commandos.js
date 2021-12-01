@@ -9,7 +9,7 @@ module.exports = {
                 return;
             }
 
-            if (Args[0].toLowerCase() === "criar")
+            if (Args[0].toLowerCase() === "criar" || Args[0].toLowerCase() === "create")
             {
                 if (Args.length == 1)
                 {
