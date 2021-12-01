@@ -17,7 +17,7 @@ module.exports = {
                     return;
                 }
 
-                var Msg = await Context.reply("Mesa Sendo Criada...");
+                var Msg = await Context.channel.send("Mesa Sendo Criada...");
                 var Name = Args.slice(1, Args.length).toString();
                 CriarMesa(Context, Name, Msg);
             }
