@@ -321,7 +321,7 @@ async function CheckMark(Context, Function)
 {
     var Msg = await Context.reply("Você tem certeza que deseja fazer essa ação?... **Use a reação para confirmar ou espere 15s**");
 
-    await Msg.react('✅');
+    Msg.react('✅');
 
     Msg.awaitReactions({ max: 2, time: 15000 })
         .then(async (collected) => {
