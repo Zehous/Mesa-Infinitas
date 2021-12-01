@@ -24,7 +24,7 @@ module.exports = {
                 CriarMesa(Context, Name, Msg);
             }
 
-            if (Args[0].toLowerCase() === "deletar" || Args[0].toLowerCase() === "del")
+            if ((Args[0].toLowerCase() === "deletar" || Args[0].toLowerCase() === "del") && CheckIsValidMesa(Context))
             {
                 var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.id === Context.channel.parentId && x.deleted === false );
                 var Category = Cat.values().next().value;
@@ -54,7 +54,7 @@ module.exports = {
                 }
             }
 
-            if (Args[0].toLowerCase() === "chats")
+            if (Args[0].toLowerCase() === "chats" && CheckIsValidMesa(Context))
             {
                 if (Args.length == 1)
                 {
