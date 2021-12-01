@@ -156,13 +156,7 @@ async function DeletarMesa(Context, Msg)
         if (Category.name[0] != '.')
             return Msg.edit("Categoria não pode ser deletada...");
 
-        var IdRole = 1;
-        for (let perm of Category.permissionOverwrites.cache) {
-            IdRole = perm[0];
-        }
-
-        var Roles = Context.guild.roles.cache.filter(x => x.id === IdRole);
-        var Role = Roles.values().next().value;
+        var Role = GetRoleByCategory(Category);
 
         if (Context.member.roles.cache.find(x => x.id == Role.id) === undefined)
             return Msg.delete();
