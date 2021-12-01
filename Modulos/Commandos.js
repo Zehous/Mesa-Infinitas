@@ -113,17 +113,19 @@ async function CriarMesa(Context, Name, Msg)
     Name += `_(${Context.author.username})`;
 
     var Role = await Utility.createRole(Context, Name, 'GREY');
+    var SpecRole = Context.guild.roles.cache.find(x => x.name.toLowerCase().includes('spec'));
 
     var Config = [
         { id: Context.guild.id, deny: ['VIEW_CHANNEL']}, 
         { id: Role.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'CONNECT', 'SPEAK']},
-        { id: 915011711491248188, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'CONNECT']},
+        { id: SpecRole.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'CONNECT']},
     ]
 
     var Category = await Utility.createCategory(Context, `.${Name}`, Config);
     await Utility.createChannel(Context, 'chat', 'GUILD_TEXT', Category);
     await Utility.createChannel(Context, 'dado', 'GUILD_TEXT', Category);
     await Utility.createChannel(Context, 'links', 'GUILD_TEXT', Category);
+    await Utility.createChannel(Context, 'musicas', 'GUILD_TEXT', Category);
     await Utility.createChannel(Context, 'Voz #1', 'GUILD_VOICE', Category);
     await Utility.createChannel(Context, 'Voz #2', 'GUILD_VOICE', Category);
     await Context.member.roles.add(Role);
@@ -135,8 +137,6 @@ async function CriarMesa(Context, Name, Msg)
 async function DeletarMesa(Context, Msg)
 {
     try{
-
-        await Msg.reactions.removeAll();
         var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.id === Context.channel.parentId && x.deleted === false );
         var Category = Cat.values().next().value;
 
@@ -308,8 +308,12 @@ async function UserRem(Context, MesaId)
 function GetRoleByCategory(Context, Category)
 {
     var IdRole = 1;
+    let Cont = 0;
     for (let perm of Category.permissionOverwrites.cache) {
         IdRole = perm[0];
+        Cont++
+        if(Cont >= Category.permissionOverwrites.cache.size-1)
+            break;
     }
 
     var Roles = Context.guild.roles.cache.filter(x => x.id === IdRole);
