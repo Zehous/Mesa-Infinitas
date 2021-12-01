@@ -5,7 +5,7 @@ module.exports = {
         {
             if (Args.length == 0)
             {
-                Context.reply("use: .mesa {criar/deletar/chat}");
+                Context.reply("use: .mesa {criar/deletar/chats/usuarios}");
                 return;
             }
 
@@ -22,7 +22,7 @@ module.exports = {
                 CriarMesa(Context, Name, Msg);
             }
 
-            if (Args[0].toLowerCase() === "deletar")
+            if (Args[0].toLowerCase() === "deletar" || Args[0].toLowerCase() === "del")
             {
                 var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.id === Context.channel.parentId && x.deleted === false );
                 var Category = Cat.values().next().value;
@@ -30,31 +30,29 @@ module.exports = {
                 if (Category.name[0] != '.')
                     return Context.reply("Essa categoria não e uma mesa valida...");
 
-
-                var Msg = await Context.reply("Você esta preste a deletar a mesa tem certeza... **Use a reação para confirmar**");
-
-                Msg.react('✅');
-
-                Msg.awaitReactions({ max: 2, time: 15000 })
-                    .then(collected => {
-                        var React = collected.first();
-
-                        var Users = React.users._cache.filter(x => x.id === Context.author.id);
-                        var User = Users.values().next().value;
-
-                        if (User.id == Context.author.id && React._emoji.name === '✅')
-                            DeletarMesa(Context, Msg);
-                    })
-                    .catch(collected => {
-                        Context.delete();
-                        Msg.delete();
-                    });
-
+                CheckMark(Context, DeletarMesa);
             }
 
+            if (Args[0].toLowerCase() === "users" || Args[0].toLowerCase() === "usuarios")
+            {
+                if (Args.length <= 3)
+                {
+                    Context.reply("use: .mesa usuarios {adicionar/remover} {Mesa Categoria Id} {@ do usuario}");
+                    return;
+                }
 
+                if (Args[1].toLowerCase() === "adicionar" || Args[1].toLowerCase() === "add")
+                {
+                    UserAdd(Context, Args[3])
+                }
 
-            if (Args[0].toLowerCase() === "chat")
+                if (Args[1].toLowerCase() === "remover" || Args[1].toLowerCase() === "remove")
+                {
+                    UserRem(Context, Args[3])
+                }
+            }
+
+            if (Args[0].toLowerCase() === "chats")
             {
                 if (Args.length == 1)
                 {
@@ -83,26 +81,7 @@ module.exports = {
                     if (Category.name[0] != '.')
                         return Context.reply("Essa categoria não e uma mesa valida...");
 
-
-                    var Msg = await Context.reply("Você esta preste a deletar o chat tem certeza... **Use a reação para confirmar**");
-
-                    Msg.react('✅');
-
-                    Msg.awaitReactions({ max: 2, time: 15000 })
-                        .then(collected => {
-                            var React = collected.first();
-
-                            var Users = React.users._cache.filter(x => x.id === Context.author.id);
-                            var User = Users.values().next().value;
-
-                            if (User.id == Context.author.id && React._emoji.name === '✅')
-                                DelChatMesa(Context, Msg);
-                        })
-                        .catch(collected => {
-                            Context.delete();
-                            Msg.delete();
-                        });
-
+                    CheckMark(Context, DelChatMesa);
                 }
 
                 if (Args[1].toLowerCase() === "renomear" || Args[1].toLowerCase() === "rename")
@@ -264,3 +243,87 @@ async function ClearChannel(Context, Index)
     })
 }
 
+
+async function UserAdd(Context, MesaId)
+{
+    var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.id === MesaId && x.deleted === false );
+    var Category = Cat.values().next().value;
+    var Role = GetRoleByCategory(Context, Category);
+    var Ment = Context.mentions.members.first();
+
+    if (Ment.roles.cache.find(x => x.id == Role.id))
+        return Context.reply("A Pessoa Mencionada Já Possui o cargo.");
+
+    if (!Context.member.roles.cache.find(x => x.id == Role.id))
+        return Context.reply("Você não pode dar um cargo de outras pessoas sem ter o cargo.");
+
+    if ( Context.mentions.users.size >= 1)
+    {
+        Ment.roles.add(Role);
+        Context.channel.send(`O Cargo <@&${Role.id}> foi dado para o <@${Ment.id}>. By: <@${Context.author.id}>`)
+        Context.delete();
+    }
+    else {Context.reply("a pessoa mencionada não foi achada")}
+}
+
+async function UserRem(Context, MesaId)
+{
+    var Cat = Context.guild.channels.cache.filter(x => x.type == "GUILD_CATEGORY" && x.id === MesaId && x.deleted === false );
+    var Category = Cat.values().next().value;
+    var Role = GetRoleByCategory(Context, Category);
+    var Ment = Context.mentions.members.first();
+
+    if (!Ment.roles.cache.find(x => x.id == Role.id))
+        return Context.reply("A Pessoa Mencionada Não Possui o cargo.");
+
+    if (!Context.member.roles.cache.find(x => x.id == Role.id))
+        return Context.reply("Você não pode tirar o cargo de outras pessoas sem ter o cargo.");
+
+    if ( Context.mentions.users.size >= 1)
+    {
+        Ment.roles.remove(Role);
+        Context.channel.send(`O Cargo <@&${Role.id}> foi retirado do <@${Ment.id}>. By: <@${Context.author.id}>`)
+        Context.delete();
+    }
+    else {Context.reply("a pessoa mencionada não foi achada")}
+}
+
+
+
+
+
+function GetRoleByCategory(Context, Category)
+{
+    var IdRole = 1;
+    for (let perm of Category.permissionOverwrites.cache) {
+        IdRole = perm[0];
+    }
+
+    var Roles = Context.guild.roles.cache.filter(x => x.id === IdRole);
+    var Role = Roles.values().next().value;
+
+    return Role;
+}
+
+async function CheckMark(Context, Function)
+{
+    var Msg = await Context.reply("Você tem certeza que deseja fazer essa ação?... **Use a reação para confirmar ou espere 15s**");
+
+    await Msg.react('✅');
+
+    Msg.awaitReactions({ max: 2, time: 15000 })
+        .then(async (collected) => {
+            var React = collected.first();
+            await Msg.reactions.removeAll();
+
+            var Users = React.users._cache.filter(x => x.id === Context.author.id);
+            var User = Users.values().next().value;
+
+            if (User.id == Context.author.id && React._emoji.name === '✅')
+                Function(Context, Msg);
+        })
+        .catch(collected => {
+            Context.delete();
+            Msg.delete();
+        });
+}
