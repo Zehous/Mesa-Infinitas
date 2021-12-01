@@ -159,7 +159,7 @@ async function DeletarMesa(Context, Msg)
         var Role = GetRoleByCategory(Category);
 
         if (Context.member.roles.cache.find(x => x.id == Role.id) === undefined)
-            return Msg.delete();
+            return Msg.edit("Não foi possivel achar o cargo no usuario...");
 
         var Chs = Category.children;
         for (let Ch of Chs) {
@@ -349,7 +349,7 @@ async function CheckMark(Context, Function)
     Msg.awaitReactions({ max: 1, time: 15000 })
         .then(async (collected) => {
             var React = collected.first();
-            await Msg.reactions.removeAll();
+            
 
             var Users = React.users._cache.filter(x => x.id === Context.author.id);
 
@@ -358,7 +358,10 @@ async function CheckMark(Context, Function)
             if (User != undefined)
             {
                 if (User.id == Context.author.id && React._emoji.name === '✅')
+                {
+                    await Msg.reactions.removeAll();
                     Function(Context, Msg);
+                }
             }
         })
         .catch(collected => {
