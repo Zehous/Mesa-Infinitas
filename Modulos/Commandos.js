@@ -123,7 +123,8 @@ async function CriarMesa(Context, Name, Msg)
     await Utility.createChannel(Context, 'chat', 'GUILD_TEXT', Category);
     await Utility.createChannel(Context, 'dado', 'GUILD_TEXT', Category);
     await Utility.createChannel(Context, 'links', 'GUILD_TEXT', Category);
-    await Utility.createChannel(Context, 'Voz', 'GUILD_VOICE', Category);
+    await Utility.createChannel(Context, 'Voz #1', 'GUILD_VOICE', Category);
+    await Utility.createChannel(Context, 'Voz #2', 'GUILD_VOICE', Category);
     await Context.member.roles.add(Role);
 
     await Context.delete();
@@ -248,7 +249,6 @@ async function ClearChannel(Context, Index)
         Context.channel.bulkDelete(msgs);
     })
 }
-
 
 async function UserAdd(Context, MesaId)
 {
