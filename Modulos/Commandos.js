@@ -37,7 +37,7 @@ module.exports = {
             {
                 if (Args.length <= 3)
                 {
-                    Context.reply("use: .mesa usuarios {adicionar/remover} {Mesa Categoria Id} {@ do usuario}");
+                    Context.reply("use: .mesa usuarios {adicionar/remover} {@ do usuario} {Mesa Categoria Id}");
                     return;
                 }
 
