@@ -323,7 +323,7 @@ async function CheckMark(Context, Function)
 
     await Msg.react('✅');
 
-    Msg.awaitReactions({ max: 2, time: 15000 })
+    Msg.awaitReactions({ max: 1, time: 15000 })
         .then(async (collected) => {
             var React = collected.first();
             await Msg.reactions.removeAll();
