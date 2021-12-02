@@ -156,7 +156,10 @@ async function DeletarMesa(Context, Msg)
         if (Category.name[0] != '.')
             return Msg.edit("Categoria não pode ser deletada...");
 
-        var Role = GetRoleByCategory(Category);
+        var Role = GetRoleByCategory(Context, Category);
+
+        if (Role === undefined)
+            return;
 
         if (Context.member.roles.cache.find(x => x.id == Role.id) === undefined)
             return Msg.edit("Não foi possivel achar o cargo no usuario...");
@@ -268,6 +271,9 @@ async function UserAdd(Context, MesaId)
     var Role = GetRoleByCategory(Context, Category);
     var Ment = Context.mentions.members.first();
 
+    if (Role === undefined)
+        return;
+
     if (Ment.roles.cache.find(x => x.id == Role.id))
         return Context.reply("A Pessoa Mencionada Já Possui o cargo.");
 
@@ -292,7 +298,10 @@ async function UserRem(Context, MesaId)
 
     var Role = GetRoleByCategory(Context, Category);
     var Ment = Context.mentions.members.first();
-
+    
+    if (Role === undefined)
+        return;
+        
     if (!Ment.roles.cache.find(x => x.id == Role.id))
         return Context.reply("A Pessoa Mencionada Não Possui o cargo.");
 
@@ -325,19 +334,25 @@ function CheckIsValidMesa(Context)
 
 function GetRoleByCategory(Context, Category)
 {
-    var IdRole = 1;
-    let Cont = 0;
-    for (let perm of Category.permissionOverwrites.cache) {
-        IdRole = perm[0];
-        Cont++
-        if(Cont >= Category.permissionOverwrites.cache.size-1)
-            break;
+    try{
+        var IdRole = 1;
+        let Cont = 0;
+        for (let perm of Category.permissionOverwrites.cache) {
+            IdRole = perm[0];
+            Cont++
+            if(Cont >= Category.permissionOverwrites.cache.size-1)
+                break;
+        }
+
+        var Roles = Context.guild.roles.cache.filter(x => x.id === IdRole);
+        var Role = Roles.values().next().value;
+
+        return Role;
     }
-
-    var Roles = Context.guild.roles.cache.filter(x => x.id === IdRole);
-    var Role = Roles.values().next().value;
-
-    return Role;
+    catch {
+        Context.reply("erro: \"Erro Inesperado na Coleta de Cargos\"");
+        return undefined;
+    }
 }
 
 async function CheckMark(Context, Function)
@@ -346,7 +361,7 @@ async function CheckMark(Context, Function)
 
     await Msg.react('✅');
 
-    Msg.awaitReactions({ max: 1, time: 15000 })
+    Msg.awaitReactions({ max: 2, time: 15000 })
         .then(async (collected) => {
             var React = collected.first();
             
