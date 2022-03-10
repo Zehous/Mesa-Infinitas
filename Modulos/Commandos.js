@@ -123,14 +123,14 @@ async function CriarMesa(Context, Name, Msg)
     {
         Config = [
             { id: Context.guild.id, deny: ['VIEW_CHANNEL']}, 
-            { id: Role.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'CONNECT', 'SPEAK', 'ATTACH_FILES', 'EMBED_LINKS']},
+            { id: Role.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'CONNECT', 'SPEAK', 'ATTACH_FILES', 'EMBED_LINKS', 'ADD_REACTIONS', 'MANAGE_CHANNELS']},
             { id: SpecRole.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'CONNECT']},
         ]
     }
     else{
         Config = [
             { id: Context.guild.id, deny: ['VIEW_CHANNEL']}, 
-            { id: Role.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'CONNECT', 'SPEAK', 'ATTACH_FILES', 'EMBED_LINKS']},
+            { id: Role.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'CONNECT', 'SPEAK', 'ATTACH_FILES', 'EMBED_LINKS', 'ADD_REACTIONS', 'MANAGE_CHANNELS']},
         ]
     }
 
