@@ -117,36 +117,24 @@ async function CriarMesa(Context, Name, Msg)
     var Role = await Utility.createRole(Context, Name, 'GREY');
     var SpecRole = Context.guild.roles.cache.find(x => x.name.toLowerCase().includes('spec'));
 
-    var CatConfig = [{}];
     var Config = [{}];
 
     if (SpecRole != undefined)
     {
-        CatConfig = [
-            { id: Context.guild.id, deny: ['VIEW_CHANNEL']}, 
-            { id: Role.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'CONNECT', 'SPEAK', 'ATTACH_FILES', 'EMBED_LINKS', 'ADD_REACTIONS']},
-            { id: SpecRole.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'CONNECT']},
-        ]
-
         Config = [
             { id: Context.guild.id, deny: ['VIEW_CHANNEL']}, 
-            { id: Role.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'CONNECT', 'SPEAK', 'ATTACH_FILES', 'EMBED_LINKS', 'ADD_REACTIONS', 'MANAGE_CHANNELS']},
+            { id: Role.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'CONNECT', 'SPEAK', 'ATTACH_FILES', 'EMBED_LINKS', 'ADD_REACTIONS']},
             { id: SpecRole.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'CONNECT']},
         ]
     }
     else{
-        CatConfig = [
+        Config = [
             { id: Context.guild.id, deny: ['VIEW_CHANNEL']}, 
             { id: Role.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'CONNECT', 'SPEAK', 'ATTACH_FILES', 'EMBED_LINKS', 'ADD_REACTIONS']},
         ]
-
-        Config = [
-            { id: Context.guild.id, deny: ['VIEW_CHANNEL']}, 
-            { id: Role.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'CONNECT', 'SPEAK', 'ATTACH_FILES', 'EMBED_LINKS', 'ADD_REACTIONS', 'MANAGE_CHANNELS']},
-        ]
     }
 
-    var Category = await Utility.createCategory(Context, `.${Name}`, CatConfig);
+    var Category = await Utility.createCategory(Context, `.${Name}`, Config);
     await Utility.createChannel(Context, 'chat', 'GUILD_TEXT', Category);
     await Utility.createChannel(Context, 'dado', 'GUILD_TEXT', Category);
     await Utility.createChannel(Context, 'links', 'GUILD_TEXT', Category);
