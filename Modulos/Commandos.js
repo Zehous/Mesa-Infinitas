@@ -122,7 +122,7 @@ async function CriarMesa(Context, Name, Msg)
 
     if (SpecRole != undefined)
     {
-        Config = [
+        CatConfig = [
             { id: Context.guild.id, deny: ['VIEW_CHANNEL']}, 
             { id: Role.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'CONNECT', 'SPEAK', 'ATTACH_FILES', 'EMBED_LINKS', 'ADD_REACTIONS']},
             { id: SpecRole.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'CONNECT']},
@@ -135,7 +135,7 @@ async function CriarMesa(Context, Name, Msg)
         ]
     }
     else{
-        Config = [
+        CatConfig = [
             { id: Context.guild.id, deny: ['VIEW_CHANNEL']}, 
             { id: Role.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'CONNECT', 'SPEAK', 'ATTACH_FILES', 'EMBED_LINKS', 'ADD_REACTIONS']},
         ]
